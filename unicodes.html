@@ -1,0 +1,25 @@
+<a href="index.html">Go Back</a><br><br>
+Range: <input type="text" value="0,65535"><br>
+Length: <input type="number" id="d" value="50"><br>
+<button id="x">Generate</button>
+<p id="result">
+<script>
+	const res = document.getElementById("result");
+	const text = document.querySelector("input");
+	const len = document.getElementById("d");
+	document.getElementById("x").onclick = function() {
+		const length = +len.value;
+		const range = text.split(",").map(x => +x);
+		const string = new Array(length);
+		const min = range[0], max = range[1];
+		const range = max - min;
+		for (let i = 0; i < length; i++) {
+			string[i] = Math.floor(Math.random() * range) + min;
+		}
+		if (max < 65536) {
+			res.textContent = String.fromCharCode(...string);
+		} else {
+			res.textContent = String.fromCodePoint(...string);
+		}
+	}
+</script>
