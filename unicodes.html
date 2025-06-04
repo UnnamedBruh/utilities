@@ -9,7 +9,7 @@ Length: <input type="number" id="d" value="50"><br>
 	const len = document.getElementById("d");
 	document.getElementById("x").onclick = function() {
 		const length = +len.value;
-		let range = text.split(",").map(x => +x);
+		let range = text.value.split(",").map(x => +x);
 		const string = new Array(length);
 		const min = range[0], max = range[1];
 		range = max - min;
