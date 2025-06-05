@@ -1,4 +1,4 @@
-Math Formula (i = index of sample, len = length of sound): <input type="text" id="formula"><br>
+Math Formula (i = index of sample, len = length of sound, r = random positive proper fraction): <input type="text" id="formula"><br>
 Sample Rate: <input type="number" id="sam" value="11025"><br>
 Channels: <input type="number" id="ch" value="1"><br>
 Number Of Samples: <input type="number" id="len" value="48000"><br>
@@ -16,9 +16,20 @@ function constructString() { // Compiling this to a string and execute it direct
 		atan: "Math.atan",
 		pi: "Math.PI",
 		e: "Math.E",
-		pow: "Math.pow"
+		pow: "Math.pow",
+		abs: "Math.abs",
+		sign: "Math.sign",
+		round: "Math.round",
+		ceil: "Math.ceil",
+		floor: "Math.floor",
+		atan2: "Math.atan2",
+		r: "Math.random()",
+		asin: "Math.asin",
+		acos: "Math.acos",
+		sqrt: "Math.sqrt",
+		cbrt: "Math.cbrt"
 	}
-	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow)\b/g, (match, cap) => vocab[cap]) + ";}";
+	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow|abs|sign|round|ceil|floor|atan2|asin|acos|sqrt|cbrt|r)\b/g, (match, cap) => vocab[cap]) + ";}";
 }
 
 document.getElementById("x").onclick = function() {
