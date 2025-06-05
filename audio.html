@@ -27,9 +27,11 @@ function constructString() { // Compiling this to a string and execute it direct
 		asin: "Math.asin",
 		acos: "Math.acos",
 		sqrt: "Math.sqrt",
-		cbrt: "Math.cbrt"
+		cbrt: "Math.cbrt",
+		log: "Math.log",
+		log10: "Math.log10"
 	}
-	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow|abs|sign|round|ceil|floor|atan2|asin|acos|sqrt|cbrt|r)\b/g, (match, cap) => vocab[cap]) + ";}";
+	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow|abs|sign|round|ceil|floor|atan2|asin|acos|sqrt|cbrt|r|log|log10)\b/g, (match, cap) => vocab[cap]) + ";}";
 }
 
 document.getElementById("x").onclick = function() {
