@@ -18,7 +18,7 @@ function constructString() { // Compiling this to a string and execute it direct
 		e: "Math.E",
 		pow: "Math.pow"
 	}
-	return "let len = Math.round(sampleRate * channels * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow)\b/g, (match, cap) => vocab[cap]) + ";}";
+	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow)\b/g, (match, cap) => vocab[cap]) + ";}";
 }
 
 document.getElementById("x").onclick = function() {
@@ -27,7 +27,7 @@ document.getElementById("x").onclick = function() {
 	const lene = Math.round(Math.abs(+document.getElementById("len").value));
 	const bitsPerSample = 16;
 
-	const constructed = new Float32Array(Math.round(sampleRate * channels * (lene / sampleRate)));
+	const constructed = new Float32Array(Math.round(sampleRate * (lene / sampleRate)));
 
 	eval(constructString());
 
