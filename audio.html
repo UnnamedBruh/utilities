@@ -59,7 +59,7 @@ document.getElementById("x").onclick = function() {
 	buffer.setUint32(40, buffer.buffer.byteLength - 44, true); // the file size
 	const len = constructed.length;
 	for (let i = 0, j = 44; i < len; i++, j += 2) {
-		buffer.setInt16(j, x[i], true);
+		buffer.setInt16(j, Math.round(constructed[i] * 32767), true);
 	}
 	const blob = new Blob([buffer.buffer], {type: "audio/wav"});
 	audio.src = URL.createObjectURL(blob);
