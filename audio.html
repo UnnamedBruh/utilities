@@ -24,7 +24,7 @@ function constructString() { // Compiling this to a string and execute it direct
 document.getElementById("x").onclick = function() {
 	const sampleRate = Math.round(Math.abs(+document.getElementById("sam").value));
 	const channels = Math.round(Math.abs(+document.getElementById("ch").value));
-	const lene = Math.round(Math.abs(+document.getElementById("ch").value));
+	const lene = Math.round(Math.abs(+document.getElementById("len").value));
 	const bitsPerSample = 16;
 
 	const constructed = new Float32Array(Math.round(sampleRate * channels * (lene / sampleRate)));
