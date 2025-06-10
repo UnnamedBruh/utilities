@@ -1,5 +1,5 @@
 <a href="index.html">Back</a><br>
-Math Formula (i = index of sample, len = length of sound, r = random positive proper fraction): <input type="text" id="formula"><br>
+Math Formula (i = index of sample, len = length of sound, r = random positive proper fraction F = fibonacci function): <input type="text" id="formula"><br>
 Sample Rate: <input type="number" id="sam" value="11025"><br>
 Channels: <input type="number" id="ch" value="1"><br>
 Number Of Samples: <input type="number" id="len" value="48000"><br>
@@ -7,6 +7,40 @@ Number Of Samples: <input type="number" id="len" value="48000"><br>
 <audio controls>
 <script>
 const audio = document.querySelector("audio");
+
+function multiplyMatrices(a, b) {
+    return [
+        [
+            a[0][0] * b[0][0] + a[0][1] * b[1][0],
+            a[0][0] * b[0][1] + a[0][1] * b[1][1]
+        ],
+        [
+            a[1][0] * b[0][0] + a[1][1] * b[1][0],
+            a[1][0] * b[0][1] + a[1][1] * b[1][1]
+        ]
+    ];
+}
+
+function matrixPower(matrix, n) {
+    if (n === 1) return matrix;
+
+    if (n % 2 === 0) {
+        const half = matrixPower(matrix, n / 2);
+        return multiplyMatrices(half, half);
+    } else {
+        return multiplyMatrices(matrix, matrixPower(matrix, n - 1));
+    }
+}
+
+function fibonacci(n) {
+    if (n === 0) return 0;
+    const baseMatrix = [
+        [1, 1],
+        [1, 0]
+    ];
+    const result = matrixPower(baseMatrix, n - 1);
+    return result[0][0];
+}
 
 function constructString() { // Compiling this to a string and execute it directly to avoid interpreter overhead (not the most secure approach)
 	const formula = document.getElementById("formula").value;
@@ -30,9 +64,11 @@ function constructString() { // Compiling this to a string and execute it direct
 		sqrt: "Math.sqrt",
 		cbrt: "Math.cbrt",
 		log: "Math.log",
-		log10: "Math.log10"
+		log10: "Math.log10",
+		F: "fibonacci",
+		Fib: "fibonacci"
 	}
-	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow|abs|sign|round|ceil|floor|atan2|asin|acos|sqrt|cbrt|r|log|log10)\b/g, (match, cap) => vocab[cap]) + ";}";
+	return "let len = Math.round(sampleRate * (lene / sampleRate)); for (let i = 0; i < lene; i++) {constructed[i] = " + formula.replace(/\b(sin|cos|tan|atan|pi|e|pow|abs|sign|round|ceil|floor|atan2|asin|acos|sqrt|cbrt|r|log|log10|F(ib))\b/g, (match, cap) => vocab[cap]) + ";}";
 }
 
 document.getElementById("x").onclick = function() {
