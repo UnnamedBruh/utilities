@@ -22,7 +22,7 @@ function multiplyMatrices(a, b) {
 }
 
 function matrixPower(matrix, n) {
-    if (n === 1) return matrix;
+    if (n <= 1) return matrix;
 
     if (n % 2 === 0) {
         const half = matrixPower(matrix, n / 2);
