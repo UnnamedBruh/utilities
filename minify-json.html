@@ -1,0 +1,6 @@
+<textarea id="js"></textarea><button id="p">Minify!</button>
+<script>
+  document.getElementById("p").onclick = function() {
+    document.getElementById("js").value = JSON.stringify(JSON.parse(document.getElementById("js").value));
+  }
+</script>
