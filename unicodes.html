@@ -11,17 +11,14 @@ Length: <input type="number" id="d" value="50"><br>
 	document.getElementById("x").onclick = function() {
 		const length = +len.value;
 		let range = text.value.split(",").map(x => +x);
-		const string = new Uint32Array(length);
+		const string = new Uint8Array(length * 4);
+const data = new DataView(string);
 		const min = range[0], max = range[1] + 1;
 		range = max - min;
 		for (let i = 0; i < length; i++) {
-			string[i] = Math.floor(Math.random() * range) + min;
+			data.setUint32(I * 4, Math.floor(Math.random() * range) + min, true);
 		}
-		if (max < 65536) {
-			res.textContent = new TextDecoder("utf-16").decode(string);
-		} else {
-			res.textContent = new TextDecoder("utf-32").decode(string);
-		}
+			res.textContent = new TextDecoder("utf-32le").decode(string);
 	}
-document.getElementById("clip").on click = () => navigator.clipboard.writeText(res.textContent);
+document.getElementById("clip").onclick = () => navigator.clipboard.writeText(res.textContent);
 </script>
