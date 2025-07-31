@@ -11,7 +11,7 @@ Length: <input type="number" id="d" value="50"><br>
 	document.getElementById("x").onclick = function() {
     const length = +len.value;
     let [min, max] = text.value.split(",").map(x => +x);
-    if (isNaN(min) || isNaN(max) || min < 0 || max > 0x10FFFF || min > max) {
+    if (isNaN(min) || isNaN(max)) {
         res.textContent = "Invalid range";
         return;
     }
