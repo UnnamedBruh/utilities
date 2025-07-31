@@ -9,17 +9,21 @@ Length: <input type="number" id="d" value="50"><br>
 	const text = document.querySelector("input");
 	const len = document.getElementById("d");
 	document.getElementById("x").onclick = function() {
-try {
-		const length = +len.value;
-		let range = text.value.split(",").map(x => +x);
-		const string = new Uint8Array(length * 4);
-const data = new DataView(string.buffer);
-		const min = range[0], max = range[1] + 1;
-		range = max - min;
-		for (let i = 0; i < length; i++) {
-			data.setUint32(i * 4, Math.floor(Math.random() * range) + min, true);
-		}
-			res.textContent = new TextDecoder("utf-32le").decode(string);
-	} catch (error) {alert(error.message)}}
+    const length = +len.value;
+    let [min, max] = text.value.split(",").map(x => +x);
+    if (isNaN(min) || isNaN(max) || min < 0 || max > 0x10FFFF || min > max) {
+        res.textContent = "Invalid range";
+        return;
+    }
+
+    max++;
+    const range = max - min;
+    let output = "";
+    for (let i = 0; i < length; i++) {
+        const code = Math.floor(Math.random() * range) + min;
+        output += String.fromCodePoint(code);
+    }
+    res.textContent = output;
+};
 document.getElementById("clip").onclick = () => navigator.clipboard.writeText(res.textContent);
 </script>
