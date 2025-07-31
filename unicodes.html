@@ -12,11 +12,11 @@ Length: <input type="number" id="d" value="50"><br>
 		const length = +len.value;
 		let range = text.value.split(",").map(x => +x);
 		const string = new Uint8Array(length * 4);
-const data = new DataView(string);
+const data = new DataView(string.buffer);
 		const min = range[0], max = range[1] + 1;
 		range = max - min;
 		for (let i = 0; i < length; i++) {
-			data.setUint32(I * 4, Math.floor(Math.random() * range) + min, true);
+			data.setUint32(i * 4, Math.floor(Math.random() * range) + min, true);
 		}
 			res.textContent = new TextDecoder("utf-32le").decode(string);
 	}
