@@ -9,6 +9,7 @@ Length: <input type="number" id="d" value="50"><br>
 	const text = document.querySelector("input");
 	const len = document.getElementById("d");
 	document.getElementById("x").onclick = function() {
+try {
 		const length = +len.value;
 		let range = text.value.split(",").map(x => +x);
 		const string = new Uint8Array(length * 4);
@@ -19,6 +20,6 @@ const data = new DataView(string.buffer);
 			data.setUint32(i * 4, Math.floor(Math.random() * range) + min, true);
 		}
 			res.textContent = new TextDecoder("utf-32le").decode(string);
-	}
+	} catch (error) {alert(error.message)}}
 document.getElementById("clip").onclick = () => navigator.clipboard.writeText(res.textContent);
 </script>
