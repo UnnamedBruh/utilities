@@ -37,4 +37,13 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 	use.oninput = function() {
 		render(Number(page.value) * 256, use.checked);
 	}
+
+	document.addEventListener("keydown", (e) => {
+		let val = Number(page.value);
+		if (e.key === "ArrowRight") page.value = ++val;
+		if (e.key === "ArrowLeft" && val > 0) page.value = --val;
+		render(Number(page.value) * 256, use.checked);
+	});
+
+	render(0, false);
 </script>
