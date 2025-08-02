@@ -122,7 +122,6 @@ const accentedVariants = {
 };
 
 	const zalgo = (text, level, accented) => {
-		if (level === 0 && !accented) return text;
 		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '͜', '͔']
 		const slash = "̷";
 		const dash = "̵";
@@ -325,6 +324,18 @@ const accentedVariants = {
 			'x': 'x', 'y': 'ʏ', 'z': 'ᴢ'
   		}
 		return text.replace(/[a-z]/g, c => map[c]);
+	};
+
+	const emoji = (text) => {
+		const map = {
+			"apple": "🍎", "green apple": "🍏", "fear": "😨", "feared": "😨", "fearful": "😨", "angry": "😠", "pissed": "😡", "rage": "😡", "embarrassed": "😳", "flustered": "😳", "lame": "🙄", "whatever": "🙄", "smile": "🙂", "smiled": "🙂", "smiling": "🙂", "happy": "🙂", "glad": "🙂", "grimace": "😬", "grimaced": "😬", "grimacing": "😬", "insane": "🤪", "zany": "🤪", "saneless": "🤪",
+			"red": "🔴", "ready": "🔴", "scarlet": "🔴", "orange": "🍊", "yellow": "💛", "green": "💚", "blue": "🔵", "purple": "💜"
+  		}
+		return text.replace(/green apple|(lost) (his|her|their) mind|\w+/g, (c, f) => {
+			if (f === "lost") {
+				
+			} else return map[c] + " " + c;
+		});
 	};
 
 	t.oninput = function() {
