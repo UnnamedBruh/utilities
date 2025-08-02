@@ -39,17 +39,17 @@ Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1">
 	}
 
 	const zalgo = (text, level) => {
-		const corruption = ['͑', '̍', '̝', '̙', '̊', '̈́', '̰', '̡', '͂', '̼', '͖', '̴', '̚', '͙', '͆', '̞', '̩'];
+		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳'];
 		const slash = "̷";
 		const dash = "̵";
 
 		let newText = "";
 
 		for (let i = 0; i < text.length; i++) {
+			newText += text[i] + (Math.random() > 0.5 ? dash : slash);
 			for (let j = 0; j < level; j++) {
 				newText += corruption[Math.floor(Math.random() * corruption.length)];
 			}
-			newText += (Math.random() > 0.5 ? dash : slash) + text[i];
 		}
 
 		return newText;
