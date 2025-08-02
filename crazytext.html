@@ -1,5 +1,6 @@
 Text: <input type="text" id="t"><br>
-Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1">
+Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1"><br>
+Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 <br>
 <a id="bubbles"></a><br>
 <a id="bubblesmono"></a><br>
@@ -9,6 +10,7 @@ Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1">
 <script>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
+	const dia = document.getElementById("diatricts");
 
 	const bub = document.getElementById("bubbles");
 	const bubmo = document.getElementById("bubblesmono");
@@ -38,15 +40,77 @@ Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1">
 		}));
 	}
 
-	const zalgo = (text, level) => {
-		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳'];
+const accentedVariants = {
+	A: ['À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ā', 'Ă', 'Ą'],
+	a: ['à', 'á', 'â', 'ã', 'ä', 'å', 'ā', 'ă', 'ą'],
+	E: ['È', 'É', 'Ê', 'Ë', 'Ē', 'Ĕ', 'Ė', 'Ę', 'Ě'],
+	e: ['è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'],
+	I: ['Ì', 'Í', 'Î', 'Ï', 'Ĩ', 'Ī', 'Ĭ', 'Į', 'İ'],
+	i: ['ì', 'í', 'î', 'ï', 'ĩ', 'ī', 'ĭ', 'į', 'ı', 'ľ'],
+	O: ['Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ō', 'Ŏ', 'Ő', 'Ø'],
+	o: ['ò', 'ó', 'ô', 'õ', 'ö', 'ō', 'ŏ', 'ő', 'ø'],
+	U: ['Ù', 'Ú', 'Û', 'Ü', 'Ũ', 'Ū', 'Ŭ', 'Ů', 'Ű', 'Ų'],
+	u: ['ù', 'ú', 'û', 'ü', 'ũ', 'ū', 'ŭ', 'ů', 'ű', 'ų'],
+	C: ['Ç', 'Ć', 'Č'],
+	c: ['ç', 'ć', 'č'],
+	N: ['Ñ', 'Ń', 'Ň', 'Ņ', 'Ŋ'],
+	n: ['ñ', 'ń', 'ň', 'ņ', 'ŉ', 'ŋ'],
+	S: ['Ś', 'Š'],
+	s: ['ś', 'š'],
+	Z: ['Ź', 'Ż', 'Ž'],
+	z: ['ź', 'ż', 'ž'],
+	D: ['Ð', 'Ď', 'Đ'],
+	d: ['ð', 'ď'],
+	Y: ['Ý'],
+	y: ['ý', 'ÿ'],
+	G: ['Ĝ', 'Ğ', 'Ġ', 'Ģ'],
+	g: ['ĝ', 'ğ', 'ġ', 'ģ'],
+	H: ['Ĥ', 'Ħ'],
+	h: ['ĥ', 'ħ'],
+	J: ['Ĵ'],
+	j: ['ĵ'],
+	K: ['Ķ'],
+	k: ['ķ', 'ĸ'],
+	L: ['Ĺ', 'Ļ', 'Ľ', 'Ŀ', 'Ł'],
+	l: ['ĺ', 'ļ', 'ŀ', 'ł'],
+	R: ['Ŕ', 'Ŗ', 'Ř'],
+	r: ['ŕ', 'ŗ', 'ř'],
+	T: ['Ţ', 'Ť', 'Ŧ'],
+	t: ['ţ', 'ť', 'ŧ'],
+	"...": ['...', '…', '……'],
+	".": ['.', '。'],
+	",": [',', '，'],
+	"!": ['!', '！'],
+	"?": ['?', '？'],
+	":": [':', '：'],
+	";": [';', '；'],
+	"(": ['(', '（'],
+	")": [')', '）'],
+	"[": ['[', '【'],
+	"]": [']', '】'],
+	"]": [']', '】'],
+	"\"": ['"', '“', '”'],
+	"'": ['\'', '‘', '’', '`']
+};
+
+	const zalgo = (text, level, accented) => {
+		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '͜', '͔']
 		const slash = "̷";
 		const dash = "̵";
+		const dash2= '̶'
+
+		const reg = /\.\.\.|[AaEeIiOoUuCcNnSsZzDdYyGgHhJjKkLlRrTt\.\,!\?:;\[\]\(\)"']/g;
 
 		let newText = "";
 
+		if (accented) {
+			text = text.replace(reg, function(match) {
+				return accentedVariants[match][Math.floor(Math.random() * accentedVariants[match].length)];
+			});
+		}
+
 		for (let i = 0; i < text.length; i++) {
-			newText += text[i] + (Math.random() > 0.5 ? dash : slash);
+			newText += text[i] + (level > 0 ? (Math.random() > 0.5 ? (Math.random() > 0.5 ? dash : dash2) : slash) : "");
 			for (let j = 0; j < level; j++) {
 				newText += corruption[Math.floor(Math.random() * corruption.length)];
 			}
@@ -60,10 +124,14 @@ Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1">
 		bubmo.textContent = alphaFuncBoth(t.value, 9398, 9424); // Ⓐ, ⓐ
 		squ.textContent = alphaFunc(t.value, 127344); // 🅰
 		squsha.textContent = alphaFunc(t.value, 127280); // 🄰
-		zal.textContent = zalgo(t.value, Number(zalgoL.value));
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
 	}
 
 	zalgoL.oninput = function() {
-		zal.textContent = zalgo(t.value, Number(zalgoL.value));
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
+	}
+
+	dia.oninput = function() {
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
 	}
 </script>
