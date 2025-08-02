@@ -19,6 +19,7 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 <a id="cursive2"></a><br>
 <a id="letterparen"></a><br>
 <a id="smallcaps"></a><br>
+<a id="emojis"></a><br>
 <script>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
@@ -41,6 +42,7 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 	const cur2 = document.getElementById("cursive2");
 	const letp = document.getElementById("letterparen");
 	const sma = document.getElementById("smallcaps");
+	const emo = document.getElementById("emojis");
 
 	const alphaFunc = (text, bubOffset) => {
 		text = text.split("");
@@ -328,13 +330,16 @@ const accentedVariants = {
 
 	const emoji = (text) => {
 		const map = {
-			"apple": "🍎", "green apple": "🍏", "fear": "😨", "feared": "😨", "fearful": "😨", "angry": "😠", "pissed": "😡", "rage": "😡", "embarrassed": "😳", "flustered": "😳", "lame": "🙄", "whatever": "🙄", "smile": "🙂", "smiled": "🙂", "smiling": "🙂", "happy": "🙂", "glad": "🙂", "grimace": "😬", "grimaced": "😬", "grimacing": "😬", "insane": "🤪", "zany": "🤪", "saneless": "🤪",
-			"red": "🔴", "ready": "🔴", "scarlet": "🔴", "orange": "🍊", "yellow": "💛", "green": "💚", "blue": "🔵", "purple": "💜"
+			"apple": "🍎", "green apple": "🍏", "fear": "😨", "feared": "😨", "fearful": "😨", "angry demon": "👿", "pissed demon": "👿", "raged demon": "👿", "demon in rage": "👿", "angry": "😠", "pissed": "😡", "rage": "😡", "embarrassed": "😳", "flustered": "😳", "lame": "🙄", "whatever": "🙄", "smile": "🙂", "smiled": "🙂", "smiling": "🙂", "happy": "🙂", "glad": "🙂", "grimace": "😬", "grimaced": "😬", "grimacing": "😬", "insane": "🤪", "zany": "🤪", "saneless": "🤪",
+			"red": "🔴", "ready": "🔴", "scarlet": "🔴", "orange": "🍊", "yellow": "💛", "green": "💚", "blue": "🔵", "purple": "💜", "greed": "🤑", "greedy": "🤑", "shaking": "🫨", "evil": "😈", "demon": "😈", "demonic": "😈", "he": "👦", "she": "👧", "clap": "👏", "clapping": "👏", "applause": "👏", "applauded": "👏", "dead": "💀", "nauseated": "🤢", "nauseate": "🤢", "to puke": "🤢", "to throw up": "🤢", "swear": "🤬", "cuss": "🤬", "bad word": "🤬", "badass": "😎",
+			"money": "💵", "cash": "💵", "dollar": "💵", "euro": "💶", "pound": "💷", "pig": "🐖", "pig face": "🐷", "pig nose": "🐽", "piggy": "🐖", "piglet": "🐖", "in love": "😍", "head over heels": "😍", "in shambles": "😢", "proud": "🥲", "dashed": "💨", "meat": "🥩", "bacon": "🥓", "ham on stick": "🍖", "chicken leg": "🍗", "chicken": "🐔", "suspicious": "🤨", "sus": "😳", "sussy": "😳", "smug": "😏", "frog": "🐸", "panda": "🐼", "panda bear": "🐼", "boar": "🐗", "bear": "🐻"
   		}
-		return text.replace(/green apple|(lost) (his|her|their) mind|\w+/g, (c, f) => {
+		return text.replace(/pig[ -]+(face|nose)|[ -]+[ -]+stick|chicken[ -]+leg|head[ -]+over[ -]+heels|in[ -]+(love|shambles)|bad( word|ass)|to[ -]+(puke|throw up)|(angry|pissed|raged)[ -]+demon|green[ -]+apple|(lost)[ -]+(his|her|their)[ -]+mind|[A-Za-z]+/g, (c, f) => {
+			c = c.toLowerCase().c.replace(/s$/, "").replace(/[ -]+/g, " ");
+			f = f?.toLowerCase();
 			if (f === "lost") {
-				
-			} else return map[c] + " " + c;
+				return map["zany"] + " " + c;
+			} else return (map[c] ? map[c] + " " : "") + c;
 		});
 	};
 
@@ -356,6 +361,7 @@ const accentedVariants = {
 		cur2.textContent = cursive2(t.value);
 		letp.textContent = letterParen(t.value);
 		sma.textContent = smallCaps(t.value);
+		emo.textContent = emoji(t.value);
 	}
 
 	zalgoL.oninput = function() {
