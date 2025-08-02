@@ -1,6 +1,7 @@
 Text: <input type="text" id="t"><br>
 Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1"><br>
 Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
+Use Symbols In Zalgo: <input type="checkbox" id="symbols"><br>
 <br>
 <a id="bubbles"></a><br>
 <a id="bubblesmono"></a><br>
@@ -25,6 +26,7 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
 	const dia = document.getElementById("diatricts");
+	const symbol = document.getElementById("symbols");
 
 	const bub = document.getElementById("bubbles");
 	const bubmo = document.getElementById("bubblesmono");
@@ -125,13 +127,13 @@ const accentedVariants = {
 	"'": ['\'', '‘', '’', '`']
 };
 
-	const zalgo = (text, level, accented) => {
+	const zalgo = (text, level, accented, symbol) => {
 		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '͜', '͔'];
 		const slash = "̷";
 		const dash = "̵";
 		const dash2= '̶';
 
-		if (accented) corruption.push("ᩭ", "ᩢ", "ᩖ", "᪶", "᩼", "ᩤ", "ᩗ");
+		if (symbol) corruption.push("ᩭ", "ᩢ", "ᩖ", "᪶", "᩼", "ᩤ", "ᩗ");
 
 		const reg = /\.\.\.|[AaEeIiOoUuCcNnSsZzDdYyGgHhJjKkLlRrTtbFfpV\.\,!\?:;\[\]\(\)"']/g;
 
@@ -143,12 +145,10 @@ const accentedVariants = {
 			});
 		}
 
-		if (level !== 0) {
-			for (let i = 0; i < text.length; i++) {
-				newText += text[i] + (level > 0 ? (Math.random() > 0.5 ? (Math.random() > 0.5 ? dash : dash2) : slash) : "");
-				for (let j = 0; j < level; j++) {
-					newText += corruption[Math.floor(Math.random() * corruption.length)];
-				}
+		for (let i = 0; i < text.length; i++) {
+			newText += text[i] + (level > 0 ? (Math.random() > 0.5 ? (Math.random() > 0.5 ? dash : dash2) : slash) : "");
+			for (let j = 0; j < level; j++) {
+				newText += corruption[Math.floor(Math.random() * corruption.length)];
 			}
 		}
 
@@ -358,7 +358,7 @@ const accentedVariants = {
 		bubmo.textContent = alphaFuncBoth(t.value, 9398, 9424); // Ⓐ, ⓐ
 		squ.textContent = alphaFunc(t.value, 127344); // 🅰
 		squsha.textContent = alphaFunc(t.value, 127280); // 🄰
-		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked, symbol.checked);
 		sup.textContent = script(t.value, true);
 		sub.textContent = script(t.value, false);
 		mat.textContent = mathStroke(t.value);
@@ -375,10 +375,14 @@ const accentedVariants = {
 	}
 
 	zalgoL.oninput = function() {
-		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked, symbol.checked);
 	}
 
 	dia.oninput = function() {
-		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked, symbol.checked);
+	}
+
+	symbol.oninput = function() {
+		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked, symbol.checked);
 	}
 </script>
