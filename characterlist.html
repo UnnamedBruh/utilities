@@ -1,0 +1,40 @@
+<a href="/utilities/">Go Back</a><br>
+<br>
+Page: <input type="number" min="0" max="8388607" value="0" id="p"><br>
+Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
+<table border="1"><thead><tr><td>Integer</td><td>Hex</td><td>Unicode</td></tr></thead><tbody></tbody></table>
+<script>
+	const x = new Array(256);
+	const tab = document.querySelector("tbody");
+	for (let i = 0; i < 256; i++) {
+		const b = document.createElement("tr");
+		x[i] = [document.createElement("td"), document.createElement("td"), document.createElement("td")];
+		for (const z of x[i]) {
+			b.appendChild(z);
+		}
+		tab.appendChild(b);
+	}
+
+	function render(j, useCharCode) {
+		const until = j + 256;
+		for (let i = j; i < until; i++) {
+			const char = useCharCode ? String.fromCharCode(i) : String.fromCodePoint(i);
+			const index = useCharCode ? char.codePointAt(0) : i;
+			const y = x[i - j];
+			y[0].textContent = index;
+			y[1].textContent = index.toString(16).padStart(4, "0");
+			y[2].textContent = char;
+		}
+	}
+
+	const page = document.getElementById("p");
+	const use = document.getElementById("u");
+
+	page.oninput = function() {
+		render(Number(page.value) * 256, use.checked);
+	}
+
+	use.oninput = function() {
+		render(Number(page.value) * 256, use.checked);
+	}
+</script>
