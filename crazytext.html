@@ -1,14 +1,20 @@
 Text: <input type="text" id="t"><br>
+Zalgo Level: <input type="range" id="sl" min="0" max="50" step="1">
 <br>
 <a id="bubbles"></a><br>
 <a id="bubblesmono"></a><br>
 <a id="squares"></a><br>
+<a id="squaressharp"></a><br>
+<a id="zalgo"></a><br>
 <script>
 	const t = document.getElementById("t");
+	const zalgoL = document.getElementById("sl");
 
 	const bub = document.getElementById("bubbles");
 	const bubmo = document.getElementById("bubblesmono");
 	const squ = document.getElementById("squares");
+	const squsha = document.getElementById("squaressharp");
+	const zal = document.getElementById("zalgo");
 
 	const alphaFunc = (text, bubOffset) => {
 		text = text.split("");
@@ -32,9 +38,32 @@ Text: <input type="text" id="t"><br>
 		}));
 	}
 
+	const zalgo = (text, level) => {
+		const corruption = ['͑', '̍', '̝', '̙', '̊', '̈́', '̰', '̡', '͂', '̼', '͖', '̴', '̚', '͙', '͆', '̞', '̩'];
+		const slash = "̷";
+		const dash = "̵";
+
+		let newText = "";
+
+		for (let i = 0; i < text.length; i++) {
+			for (let j = 0; j < level; j++) {
+				newText += corruption[Math.floor(Math.random() * corruption.length)];
+			}
+			newText += (Math.random() > 0.5 ? dash : slash) + text[i];
+		}
+
+		return newText;
+	}
+
 	t.oninput = function() {
-		bub.textContent = alphaFunc(t.value, 127313); // 🅐
+		bub.textContent = alphaFunc(t.value, 127312); // 🅐
 		bubmo.textContent = alphaFuncBoth(t.value, 9398, 9424); // Ⓐ, ⓐ
 		squ.textContent = alphaFunc(t.value, 127344); // 🅰
+		squsha.textContent = alphaFunc(t.value, 127280); // 🄰
+		zal.textContent = zalgo(t.value, Number(zalgoL.value));
+	}
+
+	zalgoL.oninput = function() {
+		zal.textContent = zalgo(t.value, Number(zalgoL.value));
 	}
 </script>
