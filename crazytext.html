@@ -20,6 +20,7 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 <a id="letterparen"></a><br>
 <a id="smallcaps"></a><br>
 <a id="emojis"></a><br>
+<a id="short"></a><br>
 <script>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
@@ -43,6 +44,7 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 	const letp = document.getElementById("letterparen");
 	const sma = document.getElementById("smallcaps");
 	const emo = document.getElementById("emojis");
+	const sho = document.getElementById("short");
 
 	const alphaFunc = (text, bubOffset) => {
 		text = text.split("");
@@ -124,10 +126,12 @@ const accentedVariants = {
 };
 
 	const zalgo = (text, level, accented) => {
-		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '͜', '͔']
+		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '͜', '͔'];
 		const slash = "̷";
 		const dash = "̵";
-		const dash2= '̶'
+		const dash2= '̶';
+
+		if (accented) corruption.push("ᩭ", "ᩢ", "ᩖ", "᪶", "᩼", "ᩤ", "ᩗ");
 
 		const reg = /\.\.\.|[AaEeIiOoUuCcNnSsZzDdYyGgHhJjKkLlRrTtbFfpV\.\,!\?:;\[\]\(\)"']/g;
 
@@ -341,6 +345,12 @@ const accentedVariants = {
 				return map["zany"] + " " + c;
 			} else return (map[c] ? map[c] + " " : "") + c;
 		});
+	};
+
+	const shorts = {
+		"Hg": "㋌", "erg": "㋍", "eV": "㋎", "LTD": "㋏", "ㆍ|": "ㆎ", "<--": "⟵", "-->": "⟶", "<->": "⟷", "<==": "⟸", "==>": "⟹", "<=>": "⟺", "0.":"⒈","1.":"⒉","2.":"⒊","3.":"⒋","4.":"⒌","5.":"⒍","6.":"⒎","7.":"⒏","8.":"⒐","9.":"⒑","10.":"⒒","11.":"⒓","12.":"⒔","13.":"⒕","14.":"⒖","15.":"⒗","16.":"⒘","17.":"⒙","18.":"⒚","19.":"⒛",
+		"II":"Ⅱ","III":"Ⅲ","IV":"Ⅳ","VI":"Ⅵ","VII":"Ⅶ","VIII":"Ⅷ","IX":"Ⅸ","XI":"Ⅺ","XII":"Ⅻ","ii":"ⅱ","iii":"ⅲ","iv":"ⅳ","vi":"ⅵ","vii":"ⅶ","viii":"ⅷ","ix":"ⅸ","xi":"ⅺ","xii":"ⅻ","CD":"ↀ", "SM": "℠", "TEL": "℡", "TM": "™", "a/c": "℀", "a/5": "℁", "°C": "℃", "°F": "℉", "c/o": "℅", "c/u": "℆", "FAX": "℻", "A/5": "⅍", "!!": "‼", "??": "⁇",
+		"?!": "⁈", "!?": "⁉"
 	};
 
 	t.oninput = function() {
