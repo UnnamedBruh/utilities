@@ -335,7 +335,7 @@ const accentedVariants = {
 			"money": "💵", "cash": "💵", "dollar": "💵", "euro": "💶", "pound": "💷", "pig": "🐖", "pig face": "🐷", "pig nose": "🐽", "piggy": "🐖", "piglet": "🐖", "in love": "😍", "head over heels": "😍", "in shambles": "😢", "proud": "🥲", "dashed": "💨", "meat": "🥩", "bacon": "🥓", "ham on stick": "🍖", "chicken leg": "🍗", "chicken": "🐔", "suspicious": "🤨", "sus": "😳", "sussy": "😳", "smug": "😏", "frog": "🐸", "panda": "🐼", "panda bear": "🐼", "boar": "🐗", "bear": "🐻"
   		}
 		return text.replace(/pig[ -]+(face|nose)|[ -]+[ -]+stick|chicken[ -]+leg|head[ -]+over[ -]+heels|in[ -]+(love|shambles)|bad( word|ass)|to[ -]+(puke|throw up)|(angry|pissed|raged)[ -]+demon|green[ -]+apple|(lost)[ -]+(his|her|their)[ -]+mind|[A-Za-z]+/g, (c, f) => {
-			c = c.toLowerCase().c.replace(/s$/, "").replace(/[ -]+/g, " ");
+			c = c.toLowerCase().replace(/s$/, "").replace(/[ -]+/g, " ");
 			f = f?.toLowerCase();
 			if (f === "lost") {
 				return map["zany"] + " " + c;
