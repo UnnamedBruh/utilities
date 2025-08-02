@@ -1,0 +1,40 @@
+Text: <input type="text" id="t"><br>
+<br>
+<a id="bubbles"></a><br>
+<a id="bubblesmono"></a><br>
+<a id="squares"></a><br>
+<script>
+	const t = document.getElementById("t");
+
+	const bub = document.getElementById("bubbles");
+	const bubmo = document.getElementById("bubblesmono");
+	const squ = document.getElementById("squares");
+
+	const alphaFunc = (text, bubOffset) => {
+		text = text.split("");
+
+		return String.fromCodePoint.apply(null, text.map(a => {
+			const x = a.codePointAt(0) - 65;
+			if (x >= 0 && x <= 25) return x + bubOffset;
+			if (x >= 32 && x <= 57) return x - 32 + bubOffset;
+			return x + 65;
+		}));
+	}
+
+	const alphaFuncBoth = (text, bubOffsetLow, bubOffsetUpper) => {
+		text = text.split("");
+
+		return String.fromCodePoint.apply(null, text.map(a => {
+			const x = a.codePointAt(0) - 65;
+			if (x >= 0 && x <= 25) return x + bubOffsetLow;
+			if (x >= 32 && x <= 57) return x - 32 + bubOffsetUpper;
+			return x + 65;
+		}));
+	}
+
+	t.oninput = function() {
+		bub.textContent = alphaFunc(t.value, 127313); // 🅐
+		bubmo.textContent = alphaFuncBoth(t.value, 9398, 9424); // Ⓐ, ⓐ
+		squ.textContent = alphaFunc(t.value, 127344); // 🅰
+	}
+</script>
