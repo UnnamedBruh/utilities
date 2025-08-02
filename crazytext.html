@@ -7,6 +7,11 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 <a id="squares"></a><br>
 <a id="squaressharp"></a><br>
 <a id="zalgo"></a><br>
+<a id="superscript"></a><br>
+<a id="subscript"></a><br>
+<a id="mathematics"></a><br>
+<a id="sansserif"></a><br>
+<a id="monospace"></a><br>
 <script>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
@@ -17,6 +22,11 @@ Use Accents/Diacritics In Zalgo: <input type="checkbox" id="diatricts"><br>
 	const squ = document.getElementById("squares");
 	const squsha = document.getElementById("squaressharp");
 	const zal = document.getElementById("zalgo");
+	const sup = document.getElementById("superscript");
+	const sub = document.getElementById("subscript");
+	const mat = document.getElementById("mathematics");
+	const san = document.getElementById("sansserif");
+	const mon = document.getElementById("monospace");
 
 	const alphaFunc = (text, bubOffset) => {
 		text = text.split("");
@@ -60,7 +70,7 @@ const accentedVariants = {
 	Z: ['Ź', 'Ż', 'Ž', 'Ƶ'],
 	z: ['ź', 'ż', 'ž', 'ƶ'],
 	D: ['Ð', 'Ď', 'Đ', 'Ɗ'],
-	d: ['ð', 'ď'],
+	d: ['ð', 'ď', 'ᵭ'],
 	Y: ['Ý', 'Ÿ', 'Ƴ'],
 	y: ['ý', 'ÿ', 'ƴ'],
 	G: ['Ĝ', 'Ğ', 'Ġ', 'Ģ', 'Ɠ'],
@@ -81,6 +91,7 @@ const accentedVariants = {
 	F: ['Ƒ'],
 	f: ['ƒ', 'ʄ'],
 	p: ['Ƥ', 'ƿ'],
+	V: ['℣'],
 	"...": ['...', '…', '……'],
 	".": ['.', '。'],
 	",": [',', '，'],
@@ -97,12 +108,13 @@ const accentedVariants = {
 };
 
 	const zalgo = (text, level, accented) => {
+		if (level === 0 && !accented) return text;
 		const corruption = ['̀', '́', '̂', '̃', '̄', '̅', '̆', '̇', '̈', '̉', '̊', '̋', '̌', '̍', '̎', '̏', '̐', '̑', '̒', '̓', '̔', '̽', '̾', '̿', '̀', '́', '͂', '̓', '̈́', 'ͅ', '̖', '̗', '̘', '̙', '̚', '̣', '̤', '̥', '̦', '̧', '̨', '̩', '̪', '̫', '̬', '̭', '̮', '̯', '̰', '̱', '̲', '̳', '͜', '͔']
 		const slash = "̷";
 		const dash = "̵";
 		const dash2= '̶'
 
-		const reg = /\.\.\.|[AaEeIiOoUuCcNnSsZzDdYyGgHhJjKkLlRrTtbFfp\.\,!\?:;\[\]\(\)"']/g;
+		const reg = /\.\.\.|[AaEeIiOoUuCcNnSsZzDdYyGgHhJjKkLlRrTtbFfpV\.\,!\?:;\[\]\(\)"']/g;
 
 		let newText = "";
 
@@ -112,14 +124,74 @@ const accentedVariants = {
 			});
 		}
 
-		for (let i = 0; i < text.length; i++) {
-			newText += text[i] + (level > 0 ? (Math.random() > 0.5 ? (Math.random() > 0.5 ? dash : dash2) : slash) : "");
-			for (let j = 0; j < level; j++) {
-				newText += corruption[Math.floor(Math.random() * corruption.length)];
+		if (level !== 0) {
+			for (let i = 0; i < text.length; i++) {
+				newText += text[i] + (level > 0 ? (Math.random() > 0.5 ? (Math.random() > 0.5 ? dash : dash2) : slash) : "");
+				for (let j = 0; j < level; j++) {
+					newText += corruption[Math.floor(Math.random() * corruption.length)];
+				}
 			}
 		}
 
 		return newText;
+	}
+
+	const script = (text, superOrSub = false) => {
+		text = text.toLowerCase();
+		if (superOrSub) {
+			const map = {
+				// official superscripts
+				'a': 'ᵃ', 'b': 'ᵇ', 'c': 'ᶜ', 'd': 'ᵈ', 'e': 'ᵉ', 'f': 'ᶠ', 'g': 'ᵍ', 'h': 'ʰ', 'i': 'ⁱ', 'j': 'ʲ', 'k': 'ᵏ', 'l': 'ˡ', 'm': 'ᵐ', 'n': 'ⁿ', 'o': 'ᵒ', 'p': 'ᵖ', 'r': 'ʳ', 's': 'ˢ', 't': 'ᵗ', 'u': 'ᵘ', 'v': 'ᵛ', 'w': 'ʷ', 'x': 'ˣ', 'y': 'ʸ', 'B': 'ᴮ', 'D': 'ᴰ', 'F': 'ᶠ', 'H': 'ᴴ', 'I': 'ᴵ', 'J': 'ᴶ', 'K': 'ᴷ', 'L': 'ᴸ', 'M': 'ᴹ', 'N': 'ᴺ', 'P': 'ᴾ', 'R': 'ᴿ', 'T': 'ᵀ', 'U': 'ᵁ', 'V': 'ᵛ', 'W': 'ᵂ',
+				// approximations for missing letters
+				'A': 'ᴬ', 'C': 'ᶜ', 'E': 'ᴱ', 'G': 'ᴳ', 'O': 'ᴼ', 'Q': 'ᵠ', 'S': 'ˢ', 'X': 'ˣ', 'Y': 'ʸ', 'Z': 'ᶻ', 'q': 'ᑫ', 'z': 'ᶻ', 't': 'ᵗ'
+			}
+			return text.replace(/[A-Za-z]/g, m => map[m]);
+		} else {
+			const map = {
+  				'a': 'ₐ', 'b': 'ᵦ', 'c': 'ᶜ', 'd': 'ᵭ', 'e': 'ₑ', 'f': 'ᶠ', 'g': 'ᵧ', 'h': 'ₕ', 'i': 'ᵢ', 'j': 'ⱼ', 'k': 'ₖ', 'l': 'ₗ', 'm': 'ₘ', 'n': 'ₙ', 'o': 'ₒ', 'p': 'ₚ', 'q': 'ᑫ', // approximate to q
+				'r': 'ᵣ', 's': 'ₛ', 't': 'ₜ', 'u': 'ᵤ', 'v': 'ᵥ', 'w': 'ₓ', 'x': 'ₓ', 'y': 'ᵧ', 'z': 'ᶻ', 'A': 'ₐ', 'B': 'ᵦ', 'C': 'ᶜ', 'D': 'ᵭ', 'E': 'ₑ', 'F': 'ᶠ', 'G': 'ᵧ', 'H': 'ₕ', 'I': 'ᵢ', 'J': 'ⱼ', 'K': 'ₖ', 'L': 'ₗ', 'M': 'ₘ', 'N': 'ₙ', 'O': 'ₒ', 'P': 'ₚ', 'Q': 'ᑫ', 'R': 'ᵣ', 'S': 'ₛ', 'T': 'ₜ', 'U': 'ᵤ', 'V': 'ᵥ', 'W': 'ₓ', 'X': 'ₓ', 'Y': 'ᵧ', 'Z': 'ᶻ'
+			}
+			return text.replace(/[A-Za-z]/g, m => map[m]);
+		}
+	}
+
+	const mathStroke = (text) => {
+		const map = {
+			'A': '𝔸', 'B': '𝔹', 'C': 'ℂ', 'D': '𝔻', 'E': '𝔼', 'F': '𝔽', 'G': '𝔾', 'H': 'ℍ',
+			'I': '𝕀', 'J': '𝕁', 'K': '𝕂', 'L': '𝕃', 'M': '𝕄', 'N': 'ℕ', 'O': '𝕆', 'P': 'ℙ',
+			'Q': 'ℚ', 'R': 'ℝ', 'S': '𝕊', 'T': '𝕋', 'U': '𝕌', 'V': '𝕍', 'W': '𝕎', 'X': '𝕏',
+			'Y': '𝕐', 'Z': 'ℤ',
+
+			'a': '𝕒', 'b': '𝕓', 'c': '𝕔', 'd': '𝕕', 'e': '𝕖', 'f': '𝕗', 'g': '𝕘', 'h': '𝕙',
+			'i': '𝕚', 'j': '𝕛', 'k': '𝕜', 'l': '𝕝', 'm': '𝕞', 'n': '𝕟', 'o': '𝕠', 'p': '𝕡',
+			'q': '𝕢', 'r': '𝕣', 's': '𝕤', 't': '𝕥', 'u': '𝕦', 'v': '𝕧', 'w': '𝕨', 'x': '𝕩',
+			'y': '𝕪', 'z': '𝕫',
+
+			0: '𝟘', 1: '𝟙', 2: '𝟚', 3: '𝟛', 4: '𝟜', 5: '𝟝', 6: '𝟞', 7: '𝟟', 8: '𝟠', 9: '𝟡'
+		}
+		return text.replace(/[A-Za-z0-9]/g, m => map[m]);
+	}
+
+	const sansSerif = (text) => {
+		const sansSerifMap = {
+			'A': '𝖠', 'B': '𝖡', 'C': '𝖢', 'D': '𝖣', 'E': '𝖤', 'F': '𝖥', 'G': '𝖦', 'H': '𝖧', 'I': '𝖨', 'J': '𝖩', 'K': '𝖪', 'L': '𝖫', 'M': '𝖬', 'N': '𝖭', 'O': '𝖮', 'P': '𝖯',
+			'Q': '𝖰', 'R': '𝖱', 'S': '𝖲', 'T': '𝖳', 'U': '𝖴', 'V': '𝖵', 'W': '𝖶', 'X': '𝖷', 'Y': '𝖸', 'Z': '𝖹',
+			'a': '𝗮', 'b': '𝗯', 'c': '𝗰', 'd': '𝗱', 'e': '𝗲', 'f': '𝗳', 'g': '𝗴', 'h': '𝗵', 'i': '𝗶', 'j': '𝗷', 'k': '𝗸', 'l': '𝗹', 'm': '𝗺', 'n': '𝗻', 'o': '𝗼', 'p': '𝗽',
+			'q': '𝗾', 'r': '𝗿', 's': '𝘀', 't': '𝘁', 'u': '𝘂', 'v': '𝘃', 'w': '𝘄', 'x': '𝘅', 'y': '𝘆', 'z': '𝘇',
+			0: '𝟢', 1: '𝟣', 2: '𝟤', 3: '𝟥', 4: '𝟦', 5: '𝟧', 6: '𝟨', 7: '𝟩', 8: '𝟪', 9: '𝟫'
+		};
+		return text.replace(/[A-Za-z0-9]/g, m => map[m]);
+	}
+
+	const monospace = (text) => {
+		const monospaceMap = {
+			'A': '𝙰', 'B': '𝙱', 'C': '𝙲', 'D': '𝙳', 'E': '𝙴', 'F': '𝙵', 'G': '𝙶', 'H': '𝙷', 'I': '𝙸', 'J': '𝙹', 'K': '𝙺', 'L': '𝙻', 'M': '𝙼', 'N': '𝙽', 'O': '𝙾', 'P': '𝙿',
+			'Q': '𝚀', 'R': '𝚁', 'S': '𝚂', 'T': '𝚃', 'U': '𝚄', 'V': '𝚅', 'W': '𝚆', 'X': '𝚇', 'Y': '𝚈', 'Z': '𝚉',
+			'a': '𝚊', 'b': '𝚋', 'c': '𝚌', 'd': '𝚍', 'e': '𝚎', 'f': '𝚏', 'g': '𝚐', 'h': '𝚑', 'i': '𝚒', 'j': '𝚓', 'k': '𝚔', 'l': '𝚕', 'm': '𝚖', 'n': '𝚗', 'o': '𝚘', 'p': '𝚙',
+			'q': '𝚚', 'r': '𝚛', 's': '𝚜', 't': '𝚝', 'u': '𝚞', 'v': '𝚟', 'w': '𝚠', 'x': '𝚡', 'y': '𝚢', 'z': '𝚣',
+			0: '𝟶', 1: '𝟷', 2: '𝟸', 3: '𝟹', 4: '𝟺', 5: '𝟻', 6: '𝟼', 7: '𝟽', 8: '𝟾', 9: '𝟿'
+		}
+		return text.replace(/[A-Za-z0-9]/g, m => map[m]);
 	}
 
 	t.oninput = function() {
@@ -128,6 +200,11 @@ const accentedVariants = {
 		squ.textContent = alphaFunc(t.value, 127344); // 🅰
 		squsha.textContent = alphaFunc(t.value, 127280); // 🄰
 		zal.textContent = zalgo(t.value, Number(zalgoL.value), dia.checked);
+		sup.textContent = script(t.value, true);
+		sub.textContent = script(t.value, false);
+		mat.textContent = mathStroke(t.value);
+		san.textContent = sansSerif(t.value);
+		mon.textContent = monospace(t.value);
 	}
 
 	zalgoL.oninput = function() {
