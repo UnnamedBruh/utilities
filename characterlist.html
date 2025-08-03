@@ -50,6 +50,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 		"\x7F": "(delete)",
 		"\xA0": "(nobreak space)",
 		"\xAD": "(soft hyphen)",
+		"\u034F": "(combining graph. join.)",
 		"\u061C": "(arabic mark)",
 		"\u202A": "(left-to-right embed)",
 		"\u202B": "(right-to-left embed)",
@@ -60,6 +61,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 
 	const charsReal = {
 		173: "­",
+		847: '͏', // It's there, even if the cursor skips this letter
 		1564: "؜",
 		8234: "‫",//No, not this formatting in my text engine, NOOOOOO!!!
 		8235: '‫',//The character is inside the literal, and the comment is outside the literal. formatting is weird lmao
