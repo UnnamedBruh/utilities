@@ -14,7 +14,8 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 		for (const z of x[i]) {
 			b.appendChild(z);
 		}
-		x[i][3].onclick = function() {
+		tab.appendChild(b);
+		x[i][3].addEventListener("click", function() {
 			navigator.clipBoard.writeText(x[i][2].textContent);
 			ids[i] = setTimeout(function() {
 				x[i][3].textContent = "";
@@ -23,17 +24,16 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 			}, 1000);
 			x[i][3].textContent = "Copied!";
 			x[i][3].style = "background-color: black; color: white";
-		}
-		x[i][3].onmousehover = function() {
+		});
+		x[i][3].addEventListener("mouseenter", function() {
 			x[i][3].style = "background-color: green; color: white";
 			x[i][3].textContent = "Copy Character";
-		}
-		x[i][3].onmouseleave = function() {
+		});
+		x[i][3].addEventListener("mouseleave", function() {
 			x[i][3].style = "";
 			x[i][3].textContent = "";
 			if (ids[i]) clearTimeout(ids[i]);
-		}
-		tab.appendChild(b);
+		});
 	}
 
 	function render(j, useCharCode) {
