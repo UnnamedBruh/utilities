@@ -3,15 +3,35 @@
 Page: <input type="number" min="0" max="8388607" value="0" id="p"><br>
 Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 <p>Press the left and right arrow keys to navigate. Press J and L keys to navigate further.</p>
-<table border="1"><thead><tr><td>Integer</td><td>Hex</td><td>Unicode</td></tr></thead><tbody></tbody></table>
+<table border="1"><thead><tr><td>Integer</td><td>Hex</td><td>Unicode</td><td>Click To Copy</td></tr></thead><tbody></tbody></table>
 <script>
 	const x = new Array(256);
 	const tab = document.querySelector("tbody");
+	const ids = new Array(256);
 	for (let i = 0; i < 256; i++) {
 		const b = document.createElement("tr");
-		x[i] = [document.createElement("td"), document.createElement("td"), document.createElement("td")];
+		x[i] = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
 		for (const z of x[i]) {
 			b.appendChild(z);
+		}
+		x[i][3].onclick = function() {
+			navigator.clipBoard.writeText(text);
+			ids[i] = setTimeout(function() {
+				x[i][3].textContent = "";
+				ids[i] = 0;
+				x[i][3].style = "";
+			}, 1000);
+			x[i][3].textContent = "Copied!";
+			x[i][3].style = "background-color: black; color: white";
+		}
+		x[i][3].onhover = function() {
+			x[i][3].style = "background-color: green; color: white";
+			x[i][3].textContent = "Copy Character";
+		}
+		x[i][3].onleave = function() {
+			x[i][3].style = "";
+			x[i][3].textContent = "";
+			if (ids[i]) clearTimeout(ids[i]);
 		}
 		tab.appendChild(b);
 	}
@@ -25,6 +45,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 			y[0].textContent = index;
 			y[1].textContent = index.toString(16).padStart(4, "0");
 			y[2].textContent = char;
+			if (ids[i - j]) clearTimeout(ids[i - j]);
 		}
 	}
 
