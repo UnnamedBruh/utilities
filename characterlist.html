@@ -8,6 +8,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 	const x = new Array(256);
 	const tab = document.querySelector("tbody");
 	const ids = new Array(256);
+	const characters = new Array(256);
 	for (let i = 0; i < 256; i++) {
 		const b = document.createElement("tr");
 		x[i] = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
@@ -16,7 +17,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 		}
 		tab.appendChild(b);
 		x[i][3].addEventListener("click", function() {
-			navigator.clipboard.writeText(x[i][2].textContent);
+			navigator.clipboard.writeText(characters[i]);
 			ids[i] = setTimeout(function() {
 				x[i][3].textContent = "";
 				ids[i] = 0;
@@ -36,6 +37,19 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 		});
 	}
 
+	const cleanMap = {
+		"\b": "(non-backspace)",
+		"\t": "(tab)",
+		"\n": "(newline)",
+		"\v": "(vertical tab)",
+		"\f": "(form feed/page break)",
+		"\r": "(carriage return)",
+		"\v": "(vertical tab)",
+		" ": "(space)",
+		"\x7F": "(delete)",
+		"\xAD": "(nobreak space)"
+	};
+
 	function render(j, useCharCode) {
 		const until = j + 256;
 		for (let i = j; i < until; i++) {
@@ -44,7 +58,8 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 			const y = x[i - j];
 			y[0].textContent = index;
 			y[1].textContent = index.toString(16).padStart(4, "0");
-			y[2].textContent = char;
+			y[2].textContent = i < 255 && char in cleanMap ? cleanMap[char] : (char.length ? char : "(nonexistent)");
+			characters[i - j] = char;
 			if (ids[i - j]) clearTimeout(ids[i - j]);
 		}
 	}
