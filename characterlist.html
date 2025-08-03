@@ -76,7 +76,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 			const y = x[i - j];
 			y[0].textContent = index;
 			y[1].textContent = index.toString(16).padStart(4, "0");
-			y[2].textContent = i < 255 && char in cleanMap ? cleanMap[char] : (char !== "" ? char : "(nonexistent)");
+			y[2].textContent = char in cleanMap ? cleanMap[char] : (char !== "" ? char : "(nonexistent)");
 			characters[i - j] = i in charsReal ? charsReal[i] : char;
 			if (ids[i - j]) clearTimeout(ids[i - j]);
 		}
