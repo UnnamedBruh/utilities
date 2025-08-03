@@ -48,6 +48,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 		" ": "(space)",
 		"\x7F": "(delete)",
 		"\xA0": "(nobreak space)"
+		"\xAD": "&shy;"
 	};
 
 	function render(j, useCharCode) {
@@ -58,7 +59,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 			const y = x[i - j];
 			y[0].textContent = index;
 			y[1].textContent = index.toString(16).padStart(4, "0");
-			y[2].textContent = i < 255 && char in cleanMap ? cleanMap[char] : (char.length ? char : "(nonexistent)");
+			y[2].textContent = i < 255 && char in cleanMap ? cleanMap[char] : (char !== "" ? char : "(nonexistent)");
 			characters[i - j] = char;
 			if (ids[i - j]) clearTimeout(ids[i - j]);
 		}
