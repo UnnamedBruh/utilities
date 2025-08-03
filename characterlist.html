@@ -15,7 +15,7 @@ Use .fromCharCode instead of .fromCodePoint: <input type="checkbox" id="u">
 			b.appendChild(z);
 		}
 		x[i][3].onclick = function() {
-			navigator.clipBoard.writeText(text);
+			navigator.clipBoard.writeText(x[i][2].textContent);
 			ids[i] = setTimeout(function() {
 				x[i][3].textContent = "";
 				ids[i] = 0;
