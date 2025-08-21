@@ -22,6 +22,7 @@ Use Symbols In Zalgo: <input type="checkbox" id="symbols"><br>
 <a id="smallcaps"></a><br>
 <a id="emojis"></a><br>
 <a id="short"></a><br>
+<a id="fullwidth"></a><br>
 <script>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
@@ -47,6 +48,7 @@ Use Symbols In Zalgo: <input type="checkbox" id="symbols"><br>
 	const sma = document.getElementById("smallcaps");
 	const emo = document.getElementById("emojis");
 	const sho = document.getElementById("short");
+	const ful = document.getElementById("fullwidth");
 
 	const alphaFunc = (text, bubOffset) => {
 		text = text.split("");
@@ -270,9 +272,13 @@ const accentedVariants = {
 			'H': 'Ｈ', 'I': 'Ｉ', 'J': 'Ｊ', 'K': 'Ｋ', 'L': 'Ｌ', 'M': 'Ｍ', 'N': 'Ｎ',
 			'O': 'Ｏ', 'P': 'Ｐ', 'Q': 'Ｑ', 'R': 'Ｒ', 'S': 'Ｓ', 'T': 'Ｔ', 'U': 'Ｕ',
 			'V': 'Ｖ', 'W': 'Ｗ', 'X': 'Ｘ', 'Y': 'Ｙ', 'Z': 'Ｚ',
-			'0': '０', '1': '１', '2': '２', '3': '３', '4': '４', '5': '５', '6': '６', '7': '７', '8': '８', '9': '９'
+			'0': '０', '1': '１', '2': '２', '3': '３', '4': '４', '5': '５', '6': '６', '7': '７', '8': '８', '9': '９',
+			'!': '！', '"': '＂', '#': '＃', '$': '＄', '%': '％', '&': '＆', "'": '＇', '(': '（', ')': '）', '*': '＊',
+			'+': '＋', ',': '，', '-': '－', '.': '．', '/': '／', ':': '：', ';': '；', '<': '＜', '=': '＝', '>': '＞',
+			'?': '？', '@': '＠', '{': '｛', '}': '｝', '|': '｜', '~': '～', '¦': '￤', '¢': '￠', '£': '￡',
+			'[': '［', ']': '］', '\\': '＼', '^': '＾', '_': '＿', '`': '｀'
 		};
-		return text.replace(/[A-Za-z0-9]/g, m => map[m]);
+		return text.replace(/[A-Za-z0-9\!"'#$%&\(\)\*\+\,\.\-/:;\<=\>\?@\{\|\}~¦¢£\[\]\\\^_`]/g, m => map[m]);
 	}
 
 	// 𝒶𝒷𝒸 style (Calligraphic Italic)
@@ -372,6 +378,7 @@ const accentedVariants = {
 		letp.textContent = letterParen(t.value);
 		sma.textContent = smallCaps(t.value);
 		emo.textContent = emoji(t.value);
+		ful.textContent = fullWidth(t.value);
 	}
 
 	zalgoL.oninput = function() {
