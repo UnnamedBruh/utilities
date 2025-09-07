@@ -23,6 +23,11 @@ Use Symbols In Zalgo: <input type="checkbox" id="symbols"><br>
 <a id="emojis"></a><br>
 <a id="short"></a><br>
 <a id="fullwidth"></a><br>
+<a id="sfullwidth"></a><br>
+<a id="bold"></a><br>
+<a id="italic"></a><br>
+<a id="boldit"></a><br>
+<a id="type"></a><br>
 <script>
 	const t = document.getElementById("t");
 	const zalgoL = document.getElementById("sl");
@@ -49,6 +54,11 @@ Use Symbols In Zalgo: <input type="checkbox" id="symbols"><br>
 	const emo = document.getElementById("emojis");
 	const sho = document.getElementById("short");
 	const ful = document.getElementById("fullwidth");
+	const sful = document.getElementById("sfullwidth");
+	const bold = document.getElementById("bold");
+	const ital = document.getElementById("italic");
+	const boldit = document.getElementById("boldit");
+	const type = document.getElementById("type");
 
 	const alphaFunc = (text, bubOffset) => {
 		text = text.split("");
@@ -381,6 +391,11 @@ const accentedVariants = {
 		sma.textContent = smallCaps(t.value);
 		emo.textContent = emoji(t.value);
 		ful.textContent = fullWidth(t.value);
+		sful.textContext = alphaFunc(t.value, 127462); // 🇦
+		ital.textContent = alphaFuncBoth(t.value, 120328, 120354); // 𝘈, 𝘢
+		bold.textContent = alphaFuncBoth(t.value, 120276, 120302); // 𝘈, 𝘢
+		boldit.textContent = alphaFuncBoth(t.value, 120380, 120406); // 𝘈, 𝘢
+		type.textContent = alphaFuncBoth(t.value, 120432, 120458); // 𝘈, 𝘢
 	}
 
 	zalgoL.oninput = function() {
