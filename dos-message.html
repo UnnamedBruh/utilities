@@ -1,0 +1,107 @@
+<h1>DOS Message Editor</h1>
+<p>This HTML5 experiment allows you to change the DOS error message of almost any Windows EXE!</p>
+<p>You can change the message from "This program cannot be run in DOS mode." to "Sorry, but you have to run this on Windows!" to nearly any message you want! The only limit is the maximum number of characters, which cannot be exceeded while guaranteeing original behavior. The max. character limit varies depending on the EXE.</p>
+<b>This is NOT guaranteed to work safely. This is in a beta stage.</b><hr>
+Executable: <input type="file" id="exec" accept=".exe"><br>
+Message: <input type="text" id="msg" value="This program cannot be run in DOS mode." placeholder="e.g. This program cannot be run in DOS mode..." maxlength="64"><br><br>
+<a style="color: red" id="status"></a>
+<br>
+<button id="changemsg">Change Message!</button>
+<script>
+	const d = document.getElementById("exec");
+	const msgInput = document.getElementById("msg");
+	const stat = document.getElementById("status");
+
+	let data = null;
+	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader;
+
+	function msgChange() {
+		const newMsg = new TextEncoder().encode(msgInput.value);
+		dataMessage.fill(0);
+		dataMessage.set(newMsg);
+		dataMessage[newMsg.length] = 36; // $ (terminates the message)
+		data.set(dataMessage, offsetMessage);
+
+		stat.textContent = "Download copy of EXE (with DOS message changed)";
+		stat.style = "";
+		stat.href = URL.createObjectURL(new Blob([data]));
+	}
+	
+	d.onchange = function(event) {
+		const selectedFiles = event.target.files;
+		if (!selectedFiles.length) return;
+		if (!selectedFiles[0]) return;
+		const fileLoad = new FileReader();
+
+		fileLoad.onload = function(e) {
+			data = new Uint8Array(e.target.result);
+
+			if (data.length < 3584) {
+				alert("This file is too small to be a guaranteed Windows executable.");
+				return;
+			}
+
+			if (data[0] !== 77 || data[1] !== 90 || data[2] !== 144 || data[3] !== 0) {
+				alert("This isn't a Windows executable.");
+				return;
+			}
+
+			PEheader = data[60] | (data[61] << 8) | (data[62] << 16) | (data[63] << 24);
+
+			if (data[PEheader] !== 80 || data[PEheader + 1] !== 69) {
+				alert("This executable cannot be executed without changing the PE header offset. (Sadly, you can't do that with this tool.)");
+				return;
+			}
+
+			offset = 64;
+			offsetMessage = 64;
+			let suspectMessage = 64;
+
+			let printingMessage = true;
+
+			while (offset < PEheader) {
+				switch (data[offset]) {
+					case 0xBA: {
+						offset++;
+						suspectMessage = 64 + (data[offset] || (data[offset + 1] << 8));
+						break;
+					}
+					case 0xB4: {
+						offset++;
+						printingMessage = data[offset] === 0x09;
+						break;
+					}
+					case 0xCD: {
+						offset++;
+						if (data[offset] === 0x21 && printingMessage) {
+							offsetMessage = suspectMessage;
+							suspectMessage = 0;
+							offset = Infinity;
+						}
+						break;
+					}
+				}
+				offset++;
+			}
+
+			offset = offsetMessage;
+			offsetMessageEnd = offsetMessage;
+
+			while (offset < PEheader) {
+				if (data[offset] === 36) {
+					offsetMessageEnd = offset;
+					break;
+				}
+				offset++;
+			}
+
+			dataMessage = data.slice(offsetMessage, PEheader);
+
+			stat.textContent = `The maximum character limit is: ${PEheader - offsetMessage - 64}`;
+			stat.style = "color: red";
+			stat.href = "";
+			msgInput.maxlength = PEheader - offsetMessage - 64;
+		}
+		fileLoad.readAsArrayBuffer(selectedFiles[0]);
+	}
+</script>
