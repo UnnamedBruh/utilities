@@ -6,13 +6,13 @@ Executable: <input type="file" id="exec" accept=".exe"><br>
 Message: <input type="text" id="msg" value="This program cannot be run in DOS mode." placeholder="e.g. This program cannot be run in DOS mode..." maxlength="64"><br><br>
 <a style="color: red" id="status"></a>
 <br>
-<button id="changemsg">Change Message!</button>
+<button id="changemsg" disabled>Change Message!</button>
 <script>
 	const d = document.getElementById("exec");
 	const msgInput = document.getElementById("msg");
 	const stat = document.getElementById("status");
+	const change = document.getElementById("changemsg");
 
-	let data = null;
 	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader;
 
 	function msgChange() {
@@ -26,6 +26,8 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 		stat.style = "";
 		stat.href = URL.createObjectURL(new Blob([data]));
 	}
+
+	change.onclick = msgChange;
 	
 	d.onchange = function(event) {
 		const selectedFiles = event.target.files;
@@ -100,6 +102,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 			stat.textContent = `The maximum character limit is: ${PEheader - offsetMessage - 64}`;
 			stat.style = "color: red";
 			stat.href = "";
+			change.disabled = false;
 			msgInput.maxlength = PEheader - offsetMessage - 64;
 		}
 		fileLoad.readAsArrayBuffer(selectedFiles[0]);
