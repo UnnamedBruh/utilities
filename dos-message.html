@@ -106,6 +106,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 			stat.download = "";
 			change.disabled = false;
 			msgInput.maxlength = PEheader - offsetMessage;
+			msgInput.value = new TextDecoder().decode(data.subarray(offsetMessage, offsetMessageEnd - offsetMessage));
 			name = selectedFiles[0].name;
 		}
 		fileLoad.readAsArrayBuffer(selectedFiles[0]);
