@@ -17,7 +17,7 @@ Message: <input type="text" id="msg" placeholder="e.g. This program cannot be ru
 	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name, errorCode = 0;
 
 	function msgChange() {
-		if (offset === 64) {
+		if (offsetMessage === 64) {
 			const DOScode = new Uint8Array(PEheader - 64);
 
 			// 0E1FBA0E00B409CD21B8014CCD21
@@ -42,7 +42,7 @@ Message: <input type="text" id="msg" placeholder="e.g. This program cannot be ru
 
 			data.set(DOScode, 64);
 		}
-		
+
 		const newMsg = new TextEncoder().encode(msgInput.value);
 		dataMessage.fill(0);
 		dataMessage.set(newMsg);
