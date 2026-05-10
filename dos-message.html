@@ -6,14 +6,14 @@ Executable: <input type="file" id="exec" accept=".exe"><br>
 Message: <input type="text" id="msg" value="This program cannot be run in DOS mode." placeholder="e.g. This program cannot be run in DOS mode..." maxlength="64"><br><br>
 <a style="color: red" id="status"></a>
 <br>
-<button id="changemsg" disabled>Change Message!</button>
+<button id="changemsg" disabled>Change Message!</button> <button id="removemsg" disabled>Remove Message!</button>
 <script>
 	const d = document.getElementById("exec");
 	const msgInput = document.getElementById("msg");
 	const stat = document.getElementById("status");
 	const change = document.getElementById("changemsg");
 
-	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name;
+	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name, errorCode = 0;
 
 	function msgChange() {
 		const newMsg = new TextEncoder().encode(msgInput.value);
@@ -23,6 +23,26 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 		data.set(dataMessage, offsetMessage);
 
 		stat.textContent = "Download copy of EXE (with DOS message changed)";
+		stat.style = "";
+		stat.href = URL.createObjectURL(new Blob([data]));
+		stat.download = name;
+	}
+
+	function msgRemove() {
+		msgInput.value = "";
+		msgInput.disabled = true;
+
+		const DOScode = new Uint8Array(PEheader - 64);
+
+		DOScode[0] = 0xB8;
+		DOScode[1] = 0x4C;
+		DOScode[2] = errorCode;
+		DOScode[3] = 0xCD;
+		DOScode[4] = 0x21;
+
+		data.set(DOScode, 64);
+
+		stat.textContent = "Download copy of EXE (with DOS message removed)";
 		stat.style = "";
 		stat.href = URL.createObjectURL(new Blob([data]));
 		stat.download = name;
@@ -83,6 +103,14 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 						}
 						break;
 					}
+					case 0xB8: {
+						offset++;
+						if (data[offset] === 0x4C) {
+							offset++;
+							errorCode = data[offset];
+						}
+						break;
+					}
 				}
 				offset++;
 			}
@@ -107,6 +135,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 			change.disabled = false;
 			msgInput.setAttribute("maxlength", PEheader - offsetMessage - 1);
 			msgInput.value = new TextDecoder().decode(data.subarray(offsetMessage, offsetMessageEnd));
+			msgInput.disabled = false;
 			name = selectedFiles[0].name;
 		}
 		fileLoad.readAsArrayBuffer(selectedFiles[0]);
