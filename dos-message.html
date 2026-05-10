@@ -38,7 +38,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 		fileLoad.onload = function(e) {
 			data = new Uint8Array(e.target.result);
 
-			if (data.length < 3584) {
+			if (data.length < 2048) {
 				alert("This file is too small to be a guaranteed Windows executable.");
 				return;
 			}
