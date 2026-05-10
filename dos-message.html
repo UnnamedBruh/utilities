@@ -129,6 +129,7 @@ Message: <input type="text" id="msg" placeholder="e.g. This program cannot be ru
 						if (data[offset] === 0x21 && printingMessage) {
 							offsetMessage = suspectMessage;
 							suspectMessage = 0;
+							printingMessage = false;
 						} else if (data[offset] === 0x21 && errorCode !== 256) {
 							offset = Infinity;
 						}
