@@ -12,6 +12,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 	const msgInput = document.getElementById("msg");
 	const stat = document.getElementById("status");
 	const change = document.getElementById("changemsg");
+	const remove = document.getElementById("removemsg");
 
 	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name, errorCode = 0;
 
@@ -31,6 +32,8 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 	function msgRemove() {
 		msgInput.value = "";
 		msgInput.disabled = true;
+		change.disabled = true;
+		remove.disabled = true;
 
 		const DOScode = new Uint8Array(PEheader - 64);
 
@@ -49,6 +52,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 	}
 
 	change.onclick = msgChange;
+	remove.onclick = msgRemove;
 	
 	d.onchange = function(event) {
 		const selectedFiles = event.target.files;
@@ -133,6 +137,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 			stat.href = "";
 			stat.download = "";
 			change.disabled = false;
+			remove.disabled = false;
 			msgInput.setAttribute("maxlength", PEheader - offsetMessage - 1);
 			msgInput.value = new TextDecoder().decode(data.subarray(offsetMessage, offsetMessageEnd));
 			msgInput.disabled = false;
