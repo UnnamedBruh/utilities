@@ -38,8 +38,8 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 		const DOScode = new Uint8Array(PEheader - 64);
 
 		DOScode[0] = 0xB8;
-		DOScode[1] = 0x4C;
-		DOScode[2] = errorCode;
+		DOScode[1] = errorCode;
+		DOScode[2] = 0x4C;
 		DOScode[3] = 0xCD;
 		DOScode[4] = 0x21;
 
