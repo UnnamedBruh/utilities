@@ -3,7 +3,7 @@
 <p>You can change the message from "This program cannot be run in DOS mode." to "Sorry, but you have to run this on Windows!" to nearly any message you want! The only limit is the maximum number of characters, which cannot be exceeded while guaranteeing original behavior. The max. character limit varies depending on the EXE.</p>
 <b>This is NOT guaranteed to work safely. This is in a beta stage.</b><hr>
 Executable: <input type="file" id="exec" accept=".exe"><br>
-Message: <input type="text" id="msg" value="This program cannot be run in DOS mode." placeholder="e.g. This program cannot be run in DOS mode..." maxlength="64"><br><br>
+Message: <input type="text" id="msg" placeholder="e.g. This program cannot be run in DOS mode..." maxlength="64"><br><br>
 <a style="color: red" id="status"></a>
 <br>
 <button id="changemsg" disabled>Change Message!</button> <button id="removemsg" disabled>Remove Message!</button>
@@ -14,9 +14,35 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 	const change = document.getElementById("changemsg");
 	const remove = document.getElementById("removemsg");
 
-	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name, errorCode = 0;
+	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name, errorCode = 256;
 
 	function msgChange() {
+		if (offset === 64) {
+			const DOScode = new Uint8Array(PEheader - 64);
+
+			// 0E1FBA0E00B409CD21B8014CCD21
+			
+			DOScode[0] = 0x0E;
+			DOScode[1] = 0x1F;
+			DOScode[2] = 0xBA;
+			DOScode[3] = 0x0E; // Where the error message is
+			DOScode[4] = 0x00;
+			DOScode[5] = 0xB4;
+			DOScode[6] = 0x09;
+			DOScode[7] = 0xCD;
+			DOScode[8] = 0x21;
+			DOScode[9] = 0xB8;
+			DOScode[10] = errorCode;
+			DOScode[11] = 0x4C;
+			DOScode[12] = 0xCD;
+			DOScode[13] = 0x21;
+
+			dataMessage = DOScode.slice(14);
+			offsetMessage = 78;
+
+			data.set(DOScode, 64);
+		}
+		
 		const newMsg = new TextEncoder().encode(msgInput.value);
 		dataMessage.fill(0);
 		dataMessage.set(newMsg);
@@ -103,6 +129,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 						if (data[offset] === 0x21 && printingMessage) {
 							offsetMessage = suspectMessage;
 							suspectMessage = 0;
+						} else if (data[offset] === 0x21 && errorCode !== 256) {
 							offset = Infinity;
 						}
 						break;
@@ -132,14 +159,18 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 
 			dataMessage = data.slice(offsetMessage, PEheader);
 
+			if (offsetMessage === 64) {
+				if (!confirm("This executable doesn't have any error message embedded inside. Do you want to embed one in?")) return;
+			}
+
 			stat.textContent = `The maximum character limit is: ${PEheader - offsetMessage - 1}`;
 			stat.style = "color: red";
-			stat.href = "";
+			stat.setAttribute("href", "");
 			stat.download = "";
 			change.disabled = false;
 			remove.disabled = false;
 			msgInput.setAttribute("maxlength", PEheader - offsetMessage - 1);
-			msgInput.value = new TextDecoder().decode(data.subarray(offsetMessage, offsetMessageEnd));
+			if (offsetMessage === 64) msgInput.value = "This program cannot be run in DOS mode."; else msgInput.value = new TextDecoder().decode(data.subarray(offsetMessage, offsetMessageEnd));
 			msgInput.disabled = false;
 			name = selectedFiles[0].name;
 		}
