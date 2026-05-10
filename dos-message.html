@@ -101,7 +101,7 @@ Message: <input type="text" id="msg" placeholder="e.g. This program cannot be ru
 
 			PEheader = data[60] | (data[61] << 8) | (data[62] << 16) | (data[63] << 24);
 
-			if (data[PEheader] !== 80 || data[PEheader + 1] !== 69 && data[PEheader + 2] !== 0 || data[PEheader + 3] !== 0) {
+			if (data[PEheader] !== 80 || data[PEheader + 1] !== 69 || data[PEheader + 2] !== 0 || data[PEheader + 3] !== 0) {
 				alert("This executable cannot be executed without changing the PE header offset. (Sadly, you can't do that with this tool.)");
 				return;
 			}
