@@ -100,12 +100,12 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 
 			dataMessage = data.slice(offsetMessage, PEheader);
 
-			stat.textContent = `The maximum character limit is: ${PEheader - offsetMessage}`;
+			stat.textContent = `The maximum character limit is: ${PEheader - offsetMessage - 1}`;
 			stat.style = "color: red";
 			stat.href = "";
 			stat.download = "";
 			change.disabled = false;
-			msgInput.maxlength = PEheader - offsetMessage;
+			msgInput.setAttribute("maxlength", PEheader - offsetMessage - 1);
 			msgInput.value = new TextDecoder().decode(data.subarray(offsetMessage, offsetMessageEnd));
 			name = selectedFiles[0].name;
 		}
