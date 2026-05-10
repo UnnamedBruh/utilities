@@ -13,7 +13,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 	const stat = document.getElementById("status");
 	const change = document.getElementById("changemsg");
 
-	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader;
+	let offset, offsetMessage, offsetMessageEnd, data, dataMessage, PEheader, name;
 
 	function msgChange() {
 		const newMsg = new TextEncoder().encode(msgInput.value);
@@ -25,6 +25,7 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 		stat.textContent = "Download copy of EXE (with DOS message changed)";
 		stat.style = "";
 		stat.href = URL.createObjectURL(new Blob([data]));
+		stat.download = name;
 	}
 
 	change.onclick = msgChange;
@@ -102,8 +103,10 @@ Message: <input type="text" id="msg" value="This program cannot be run in DOS mo
 			stat.textContent = `The maximum character limit is: ${PEheader - offsetMessage - 64}`;
 			stat.style = "color: red";
 			stat.href = "";
+			stat.download = "";
 			change.disabled = false;
 			msgInput.maxlength = PEheader - offsetMessage - 64;
+			name = selectedFiles[0].name;
 		}
 		fileLoad.readAsArrayBuffer(selectedFiles[0]);
 	}
