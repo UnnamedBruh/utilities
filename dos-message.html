@@ -89,7 +89,7 @@ Message: <input type="text" id="msg" placeholder="e.g. This program cannot be ru
 		fileLoad.onload = function(e) {
 			data = new Uint8Array(e.target.result);
 
-			if (data.length < 2048) {
+			if (data.length < 1024) {
 				alert("This file is too small to be a guaranteed Windows executable.");
 				return;
 			}
